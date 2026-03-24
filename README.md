@@ -45,13 +45,10 @@ python app.py
 Visit http://127.0.0.1:5000 in your browser.
 
 📁 Project Structure
-job-board-app/
-│
-├── app.py
-├── scraper.py
-├── requirements.txt
-│
-├── templates/
-│
-└── data/
-    └── jobs.json
+app.py: The Flask server and web routes.
+
+scraper.py: Logic for connecting to Apify and parsing job data.
+
+templates/: HTML files for the frontend dashboard.
+
+data/: Stores the jobs.json file.
