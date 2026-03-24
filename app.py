@@ -1,22 +1,49 @@
 import json
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for, flash
+# Importing the function we built in scraper.py
+from scraper import fetch_all_jobs
 
 app = Flask(__name__)
+app.secret_key = 'supersecretjobkey' # Needed for flashing messages
 
-# Helper function to load the scraped data
+DATA_FILE = os.path.join('data', 'jobs.json')
+
 def load_jobs():
-    file_path = os.path.join('data', 'jobs.json')
-    if not os.path.exists(file_path):
+    """Reads the local JSON database."""
+    if not os.path.exists(DATA_FILE):
         return []
-    with open(file_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    try:
+        with open(DATA_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return []
 
 @app.route('/')
 def index():
+    """Main dashboard view."""
     jobs = load_jobs()
     return render_template('index.html', jobs=jobs)
 
+@app.route('/scrape')
+def scrape():
+    """Triggers the Apify scraper and updates the JSON file."""
+    print("🚀 Scrape triggered from web UI...")
+    
+    # 1. Run the scraper function from scraper.py
+    new_jobs = fetch_all_jobs()
+    
+    # 2. Ensure data directory exists
+    if not os.path.exists('data'):
+        os.makedirs('data')
+        
+    # 3. Save the fresh results
+    with open(DATA_FILE, 'w', encoding='utf-8') as f:
+        json.dump(new_jobs, f, indent=4, ensure_ascii=False)
+        
+    print(f"✅ Successfully updated {len(new_jobs)} jobs.")
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
-    # Running on 0.0.0.0 so you can see it on your phone later!
+    # host='0.0.0.0' allows access from other devices on your Wi-Fi
     app.run(debug=True, host='0.0.0.0', port=5000)
