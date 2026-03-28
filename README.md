@@ -34,11 +34,13 @@ python -m venv venv
 .\venv\Scripts\Activate
 # Install dependencies:
 pip install flask apify-client python-dotenv
+
 3. Environment Variables
 Create a .env file in the root directory:
 
 Code snippet
 APIFY_API_TOKEN=your_actual_token_here
+
 4. Running the App
 Bash
 python app.py
