@@ -44,6 +44,10 @@ Bash
 python app.py
 Visit http://127.0.0.1:5000 in your browser.
 
+Screenshot
+<img width="1919" height="944" alt="Screenshot 2026-03-28 092641" src="https://github.com/user-attachments/assets/74e56c51-d5be-4581-b8ae-472469093dab" />
+
+
 📁 Project Structure
 app.py: The Flask server and web routes.
 
